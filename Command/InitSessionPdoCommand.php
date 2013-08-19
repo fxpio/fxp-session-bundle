@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SessionBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SessionBundle\Exception\RuntimeException;
 
 /**
  * This command initializes the session table in database.
@@ -41,7 +42,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (null === $this->getContainer()->getParameter('sonatra_session.pdo.dsn')) {
-            throw new \Exception("You didn't fulfilled the 'session.pdo_dsn' parameter under the sonatra_sessions section in your app config");
+            throw new RuntimeException("You didn't fulfilled the 'session.pdo_dsn' parameter under the sonatra_sessions section in your app config");
         }
 
         $pdoOptions = $this->getContainer()->getParameter('sonatra_session.pdo.db_options');

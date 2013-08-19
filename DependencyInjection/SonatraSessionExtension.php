@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -39,7 +40,7 @@ class SonatraSessionExtension extends Extension
             $pdo = $config['pdo'];
 
             if (!isset($config['pdo']['dsn'])) {
-                throw new \Exception('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
+                throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
             }
 
             $container->setParameter('sonatra_session.pdo.dsn', $pdo['dsn']);
