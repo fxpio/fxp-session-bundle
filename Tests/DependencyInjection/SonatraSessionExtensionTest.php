@@ -63,7 +63,6 @@ class SonatraSessionExtensionTest extends \PHPUnit_Framework_TestCase
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
         $container->getCompilerPassConfig()->setRemovingPasses(array());
         //$container->compile();
-
         return $container;
     }
 }
