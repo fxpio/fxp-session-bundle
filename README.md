@@ -1,4 +1,4 @@
-﻿Sonatra Session Bundle
+Sonatra Session Bundle
 ==================
 
 The Sonatra SessionBundle allow to initialize the sessions in the database using PDO by a simple command. 
