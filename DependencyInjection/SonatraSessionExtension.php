@@ -43,7 +43,13 @@ class SonatraSessionExtension extends Extension
                 throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
             }
 
-            $container->setParameter('sonatra_session.pdo.dsn', $pdo['dsn']);
+            $dsn = $container->getParameterBag()->resolveValue($pdo['dsn']);
+
+            if (0 === strpos($dsn, 'pdo_')) {
+                $dsn = substr($dsn, 4);
+            }
+
+            $container->setParameter('sonatra_session.pdo.dsn', $dsn);
             $container->setParameter('sonatra_session.pdo.username', $pdo['username']);
             $container->setParameter('sonatra_session.pdo.password', $pdo['password']);
             $container->setParameter('sonatra_session.pdo.db_options', $pdo['db_options']);

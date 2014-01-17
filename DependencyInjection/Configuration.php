@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('dsn')
-                    ->defaultValue('mysql:host=%database_host%;dbname=%database_name%')
+                    ->defaultValue('%database_driver%:host=%database_host%;dbname=%database_name%')
                     ->info('The DSN of PDO configuration')
                 ->end()
             ->end()
