@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SessionBundle\Tests\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
@@ -24,11 +24,19 @@ use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
  */
 class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 {
+    /* @var \PHPUnit_Framework_MockObject_MockObject */
     private $application;
+
     private $definition;
     private $kernel;
+
+    /* @var \PHPUnit_Framework_MockObject_MockObject */
     private $container;
+
+    /* @var InitSessionPdoCommand */
     private $command;
+
+    private $helperSet;
 
     /**
      * @return null
@@ -82,6 +90,8 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
                 if ($p === 'sonatra_session.pdo') {
                     return $pdoMock;
                 }
+
+                return null;
             })
         );
 
