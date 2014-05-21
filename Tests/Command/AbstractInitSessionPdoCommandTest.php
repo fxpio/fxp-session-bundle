@@ -16,43 +16,49 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests case for InitSessionPdoCommand.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $application;
+    protected $application;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $definition;
+    protected $definition;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $kernel;
+    protected $kernel;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
+    protected $container;
 
     /**
      * @var InitSessionPdoCommand
      */
-    private $command;
+    protected $command;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $helperSet;
+    protected $helperSet;
+
+    /**
+     * @var string
+     */
+    protected $driver = 'driver';
 
     public function setUp()
     {
@@ -108,8 +114,11 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
             })
         );
 
+        /* @var Application $application */
+        $application = $this->application;
+
         $this->command = new InitSessionPdoCommand();
-        $this->command->setApplication($this->application);
+        $this->command->setApplication($application);
     }
 
     public function testPdoExceptionNotParameter()
@@ -130,9 +139,11 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testPdoExceptionWrongDsn()
     {
-        $this->createConfiguration('mysql:');
+        $this->createConfiguration(sprintf('%s:', $this->driver));
 
-        $pdoMock = $this->container->get('sonatra_session.pdo');
+        /* @var ContainerInterface $container */
+        $container = $this->container;
+        $pdoMock = $container->get('sonatra_session.pdo');
 
         $statmentMock = $this->getMockBuilder('\PDOStatement')
             ->setMethods(array('execute'))
@@ -140,7 +151,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
         $statmentMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnCallback(function ($p) {
+            ->will($this->returnCallback(function () {
                 throw new \PDOException('Error pdo message for wrong dsn');
             }));
 
@@ -155,9 +166,11 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testTableIsCreated()
     {
-        $this->createConfiguration('mysql:');
+        $this->createConfiguration(sprintf('%s:', $this->driver));
 
-        $pdoMock = $this->container->get('sonatra_session.pdo');
+        /* @var ContainerInterface $container */
+        $container = $this->container;
+        $pdoMock = $container->get('sonatra_session.pdo');
 
         $statmentMock = $this->getMockBuilder('\PDOStatement')
             ->setMethods(array('execute'))
@@ -178,9 +191,11 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testTableIsAlreadyCreated()
     {
-        $this->createConfiguration('mysql:');
+        $this->createConfiguration(sprintf('%s:', $this->driver));
 
-        $pdoMock = $this->container->get('sonatra_session.pdo');
+        /* @var ContainerInterface $container */
+        $container = $this->container;
+        $pdoMock = $container->get('sonatra_session.pdo');
 
         $statmentMock = $this->getMockBuilder('\PDOStatement')
             ->setMethods(array('execute'))
@@ -188,7 +203,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
         $statmentMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnCallback(function ($p) {
+            ->will($this->returnCallback(function () {
                 $ex = new \PDOException('Table aready exist');
                 $ref = new \ReflectionClass($ex);
                 $pCode = $ref->getProperty('code');
