@@ -32,9 +32,6 @@ class SonatraSessionExtensionTest extends \PHPUnit_Framework_TestCase
     public function testExtensionLoader()
     {
         $container = $this->createContainer();
-        $ext = $container->getExtension('sonatra_session');
-
-        $ext->load(array(), $container);
 
         $this->assertTrue($container->hasParameter('sonatra_session.pdo.dsn'));
         $this->assertTrue($container->hasParameter('sonatra_session.pdo.username'));
@@ -42,27 +39,35 @@ class SonatraSessionExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasParameter('sonatra_session.pdo.db_options'));
     }
 
+    /**
+     * @expectedException \Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException
+     */
     public function testExtensionDsnMissing()
     {
-        $container = $this->createContainer();
-        $ext = $container->getExtension('sonatra_session');
-
-        $this->setExpectedException('\Exception', 'The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
-        $ext->load(array(array('pdo' => array('dsn' => null))), $container);
+        $this->createContainer(array('pdo' => array('dsn' => null)));
     }
 
-    protected function createContainer()
+    protected function createContainer(array $config = array())
     {
+        $configs = empty($config) ? array() : array($config);
         $container = new ContainerBuilder();
-        $session = new SonatraSessionExtension();
-        $container->registerExtension($session);
+        $container->setParameter('database_driver', 'pdo_database_driver');
+        $container->setParameter('database_host', 'database_host');
+        $container->setParameter('database_name', 'database_name');
+        $container->setParameter('database_user', 'database_user');
+        $container->setParameter('database_password', 'database_password');
 
         $bundle = new SonatraSessionBundle();
         $bundle->build($container);
 
+        $extension = new SonatraSessionExtension();
+        $container->registerExtension($extension);
+        $extension->load($configs, $container);
+
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
         $container->getCompilerPassConfig()->setRemovingPasses(array());
-        //$container->compile();
+        $container->compile();
+
         return $container;
     }
 }

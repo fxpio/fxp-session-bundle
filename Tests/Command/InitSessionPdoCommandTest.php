@@ -24,23 +24,36 @@ use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
  */
 class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 {
-    /* @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $application;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $definition;
-    private $kernel;
-
-    /* @var \PHPUnit_Framework_MockObject_MockObject */
-    private $container;
-
-    /* @var InitSessionPdoCommand */
-    private $command;
-
-    private $helperSet;
 
     /**
-     * @return null
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $kernel;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $container;
+
+    /**
+     * @var InitSessionPdoCommand
+     */
+    private $command;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $helperSet;
+
     public function setUp()
     {
         if (!class_exists('Symfony\Component\Console\Application')) {
@@ -86,7 +99,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->container->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function($p) use ($pdoMock) {
+            ->will($this->returnCallback(function ($p) use ($pdoMock) {
                 if ($p === 'sonatra_session.pdo') {
                     return $pdoMock;
                 }
@@ -107,9 +120,17 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
         $this->command->run(new ArrayInput(array()), new NullOutput());
     }
 
+    public function testPdoExceptionWrongDsnDriver()
+    {
+        $this->createConfiguration('dsn:wrong_driver');
+
+        $this->setExpectedException('\Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException');
+        $this->command->run(new ArrayInput(array()), new NullOutput());
+    }
+
     public function testPdoExceptionWrongDsn()
     {
-        $this->createConfiguration('dsn:');
+        $this->createConfiguration('mysql:');
 
         $pdoMock = $this->container->get('sonatra_session.pdo');
 
@@ -119,7 +140,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
         $statmentMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnCallback(function($p) {
+            ->will($this->returnCallback(function ($p) {
                 throw new \PDOException('Error pdo message for wrong dsn');
             }));
 
@@ -134,7 +155,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testTableIsCreated()
     {
-        $this->createConfiguration('dsn:');
+        $this->createConfiguration('mysql:');
 
         $pdoMock = $this->container->get('sonatra_session.pdo');
 
@@ -157,7 +178,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testTableIsAlreadyCreated()
     {
-        $this->createConfiguration('dsn:');
+        $this->createConfiguration('mysql:');
 
         $pdoMock = $this->container->get('sonatra_session.pdo');
 
@@ -167,7 +188,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
 
         $statmentMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnCallback(function($p) {
+            ->will($this->returnCallback(function ($p) {
                 $ex = new \PDOException('Table aready exist');
                 $ref = new \ReflectionClass($ex);
                 $pCode = $ref->getProperty('code');
@@ -190,7 +211,7 @@ class InitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->expects($this->any())
             ->method('getParameter')
-            ->will($this->returnCallback(function($p) use ($dsn) {
+            ->will($this->returnCallback(function ($p) use ($dsn) {
                 switch ($p) {
                     case 'sonatra_session.pdo.dsn':
                         return $dsn;

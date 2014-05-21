@@ -36,7 +36,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'pdo' => array(
-                    'dsn'        => 'mysql:host=%database_host%;dbname=%database_name%',
+                    'dsn'        => '%database_driver%:host=%database_host%;dbname=%database_name%',
                     'username'   => '%database_user%',
                     'password'   => '%database_password%',
                     'db_options' => array(
