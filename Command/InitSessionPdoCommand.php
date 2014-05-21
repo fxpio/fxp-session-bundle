@@ -50,7 +50,7 @@ EOT
         $driver = substr($dsn, 0, strpos($dsn, ':'));
 
         if (!in_array($driver, array('pgsql', 'mysql'))) {
-            throw new InvalidConfigurationException('Only DSN driver "pgsql" or "mysql" are supported ("%s" currently)');
+            throw new InvalidConfigurationException(sprintf('Only DSN driver "pgsql" or "mysql" are supported ("%s" currently)', $driver));
         }
 
         $pdoOptions = $this->getContainer()->getParameter('sonatra_session.pdo.db_options');
