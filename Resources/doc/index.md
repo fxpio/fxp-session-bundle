@@ -1,5 +1,5 @@
-Getting Started With Sonatra SessionBundle
-==========================================
+Getting Started
+===============
 
 The Symfony2 session can be stored in a database using PDO, 
 and this bundle facilitates the configuration and initialization of the 
@@ -13,15 +13,15 @@ This version of the bundle requires Symfony 2.4+.
 
 Installation is a quick, 2 step process:
 
-1. Download Sonatra SessionBundle using composer
+1. Download the bundle using composer
 2. Enable the bundle
-3. Configure the bundle (optionnal)
+3. Configure the bundle (optional)
 
-### Step 1: Download Sonatra SessionBundle using composer
+### Step 1: Download the bundle using composer
 
 Add Sonatra SessionBundle in your composer.json:
 
-``` js
+```js
 {
     "require": {
         "sonatra/session-bundle": "~1.0"
@@ -31,7 +31,7 @@ Add Sonatra SessionBundle in your composer.json:
 
 Or tell composer to download the bundle by running the command:
 
-``` bash
+```bash
 $ php composer.phar update sonatra/session-bundle
 ```
 
@@ -41,7 +41,7 @@ Composer will install the bundle to your project's `vendor/sonatra` directory.
 
 Enable the bundle in the kernel:
 
-``` php
+```php
 <?php
 // app/AppKernel.php
 
@@ -59,7 +59,7 @@ public function registerBundles()
 You can override the default configuration adding `sonatra_session` tree in `app/config/config.yml`.
 For see the reference of Sonatra Session Configuration, execute command:
 
-``` bash
+```bash
 $ php app/console config:dump-reference SonatraSessionBundle 
 ```
 
@@ -70,4 +70,4 @@ Sonatra SessionBundle, you are ready to learn about usages of the bundle.
 
 The following documents are available:
 
-- [Command Initalization](command_initialization.md)
+- [Command Initialization](command_initialization.md)

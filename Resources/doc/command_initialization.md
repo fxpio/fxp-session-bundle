@@ -1,11 +1,7 @@
-Sonatra SessionBundle Command Initialization
-============================================
+Command Initialization
+======================
 
-## Prerequisites
-
-[Installation and Configuration](index.md)
-
-## Use
+## Usage
 
 Execute command:
 
@@ -17,7 +13,7 @@ $ php app/console init:session:pdo
 
 Edit the `app/config/config.yml`:
 
-``` yaml
+```yaml
 #...
 
 framework:

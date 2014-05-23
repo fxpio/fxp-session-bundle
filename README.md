@@ -1,5 +1,5 @@
 Sonatra Session Bundle
-==================
+======================
 
 The Sonatra SessionBundle allow to initialize the sessions in the database for MySQL/PgSQL PDO by a simple command.
 
