@@ -18,9 +18,8 @@
         "symfony/console": "~2.4"
     },
     "autoload": {
-        "psr-0": { "Sonatra\\Bundle\\SessionBundle": "" }
+        "psr-4": { "Sonatra\\Bundle\\SessionBundle\\": "" }
     },
-    "target-dir": "Sonatra/Bundle/SessionBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
