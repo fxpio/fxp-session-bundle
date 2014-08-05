@@ -3,6 +3,7 @@ Sonatra Session Bundle
 
 [![Latest Stable Version](https://poser.pugx.org/sonatra/session-bundle/v/stable.svg)](https://packagist.org/packages/sonatra/session-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/sonatra/session-bundle/v/unstable.svg)](https://packagist.org/packages/sonatra/session-bundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonatra/SonatraSessionBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/sonatra/SonatraSessionBundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/dce17912-cbf5-4a96-a37b-2644a9e71e71/mini.png)](https://insight.sensiolabs.com/projects/dce17912-cbf5-4a96-a37b-2644a9e71e71)
 
 The Sonatra SessionBundle allow to initialize the sessions in the database for MySQL/PgSQL PDO by a simple command.
