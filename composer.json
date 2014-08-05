@@ -1,7 +1,7 @@
 {
     "name": "sonatra/session-bundle",
     "type": "symfony-bundle",
-    "description": "Initialize the sessions in the database using PDO by a simple command",
+    "description": "Initialize sessions in database using PDO by a simple command",
     "keywords": ["init", "session", "pdo", "database"],
     "homepage": "https://github.com/sonatra/SonatraSessionBundle",
     "license": "MIT",
