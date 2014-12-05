@@ -1,8 +1,7 @@
 Sonatra Session Bundle
 ======================
 
-[![Latest Stable Version](https://poser.pugx.org/sonatra/session-bundle/v/stable.svg)](https://packagist.org/packages/sonatra/session-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/sonatra/session-bundle/v/unstable.svg)](https://packagist.org/packages/sonatra/session-bundle)
+[![Latest Version](https://img.shields.io/packagist/v/sonatra/session-bundle.svg)](https://packagist.org/packages/sonatra/session-bundle)
 [![Build Status](https://travis-ci.org/sonatra/SonatraSessionBundle.svg)](https://travis-ci.org/sonatra/SonatraSessionBundle)
 [![Coverage Status](https://img.shields.io/coveralls/sonatra/SonatraSessionBundle.svg)](https://coveralls.io/r/sonatra/SonatraSessionBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonatra/SonatraSessionBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/sonatra/SonatraSessionBundle)
