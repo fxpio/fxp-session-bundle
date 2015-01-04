@@ -1,4 +1,0 @@
-services:
-    sonatra_session.handler.pdo:
-        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        arguments: ['%sonatra_session.pdo.dsn%', '%sonatra_session.pdo.db_options%']
