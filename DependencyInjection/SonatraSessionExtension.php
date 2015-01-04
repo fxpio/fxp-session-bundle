@@ -37,20 +37,29 @@ class SonatraSessionExtension extends Extension
         # Session
         if ($config['pdo']['enabled']) {
             $loader->load('pdo_session.xml');
-            $pdo = $config['pdo'];
-
-            if (!isset($pdo['dsn'])) {
-                throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
-            }
-
-            $dsn = $container->getParameterBag()->resolveValue($pdo['dsn']);
-
-            if (0 === strpos($dsn, 'pdo_')) {
-                $dsn = substr($dsn, 4);
-            }
-
-            $container->setParameter('sonatra_session.pdo.dsn', $dsn);
-            $container->setParameter('sonatra_session.pdo.db_options', $pdo['db_options']);
+            $this->configPdo($container, $config['pdo']);
         }
+    }
+
+    /**
+     * Configure the PDO Session Handler.
+     *
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    protected function configPdo(ContainerBuilder $container, array $config)
+    {
+        if (!isset($config['dsn'])) {
+            throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
+        }
+
+        $dsn = $container->getParameterBag()->resolveValue($config['dsn']);
+
+        if (0 === strpos($dsn, 'pdo_')) {
+            $dsn = substr($dsn, 4);
+        }
+
+        $container->setParameter('sonatra_session.pdo.dsn', $dsn);
+        $container->setParameter('sonatra_session.pdo.db_options', $config['db_options']);
     }
 }
