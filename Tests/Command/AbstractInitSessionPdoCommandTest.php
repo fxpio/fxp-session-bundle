@@ -99,21 +99,6 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
             ->method('getContainer')
             ->will($this->returnValue($this->container));
 
-        $pdoMock = $this->getMockBuilder('Sonatra\Bundle\SessionBundle\Tests\Command\Fixtures\PDOMock')
-            ->setMethods(array('prepare'))
-            ->getMock();
-
-        $this->container->expects($this->any())
-            ->method('get')
-            ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ($p === 'sonatra_session.pdo') {
-                    return $pdoMock;
-                }
-
-                return null;
-            })
-        );
-
         /* @var Application $application */
         $application = $this->application;
 
@@ -123,67 +108,13 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
 
     public function testPdoExceptionNotParameter()
     {
-        $this->createConfiguration(null);
-
-        $this->setExpectedException('\Exception', 'You didn\'t fulfilled the \'session.pdo_dsn\' parameter under the sonatra_sessions section in your app config');
-        $this->command->run(new ArrayInput(array()), new NullOutput());
-    }
-
-    public function testPdoExceptionWrongDsnDriver()
-    {
-        $this->createConfiguration('dsn:wrong_driver');
-
-        $this->setExpectedException('\Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException');
-        $this->command->run(new ArrayInput(array()), new NullOutput());
-    }
-
-    public function testPdoExceptionWrongDsn()
-    {
-        $this->createConfiguration(sprintf('%s:', $this->driver));
-
-        /* @var ContainerInterface $container */
-        $container = $this->container;
-        $pdoMock = $container->get('sonatra_session.pdo');
-
-        $statmentMock = $this->getMockBuilder('\PDOStatement')
-            ->setMethods(array('execute'))
-            ->getMock();
-
-        $statmentMock->expects($this->any())
-            ->method('execute')
-            ->will($this->returnCallback(function () {
-                throw new \PDOException('Error pdo message for wrong dsn');
-            }));
-
-        $pdoMock->expects($this->any())
-            ->method('prepare')
-            ->will($this->returnValue($statmentMock)
-        );
-
-        $this->setExpectedException('\PDOException', 'Error pdo message for wrong dsn');
+        $this->setExpectedException('\Exception', 'The PDO Handler must be enabled in the config \'sonatra_session.pdo.enabled\'');
         $this->command->run(new ArrayInput(array()), new NullOutput());
     }
 
     public function testTableIsCreated()
     {
-        $this->createConfiguration(sprintf('%s:', $this->driver));
-
-        /* @var ContainerInterface $container */
-        $container = $this->container;
-        $pdoMock = $container->get('sonatra_session.pdo');
-
-        $statmentMock = $this->getMockBuilder('\PDOStatement')
-            ->setMethods(array('execute'))
-            ->getMock();
-
-        $statmentMock->expects($this->any())
-            ->method('execute')
-            ->will($this->returnValue(true));
-
-        $pdoMock->expects($this->any())
-            ->method('prepare')
-            ->will($this->returnValue($statmentMock)
-        );
+        $this->createConfiguration();
 
         $returnCode = $this->command->run(new ArrayInput(array()), new NullOutput());
         $this->assertEquals(0, $returnCode);
@@ -191,57 +122,66 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
 
     public function testTableIsAlreadyCreated()
     {
-        $this->createConfiguration(sprintf('%s:', $this->driver));
+        $this->createConfiguration();
+
+        $ex = new \PDOException('Table aready exist');
+        $ref = new \ReflectionClass($ex);
+        $pCode = $ref->getProperty('code');
+        $pCode->setAccessible(true);
+        $pCode->setValue($ex, '42S01');
 
         /* @var ContainerInterface $container */
         $container = $this->container;
-        $pdoMock = $container->get('sonatra_session.pdo');
-
-        $statmentMock = $this->getMockBuilder('\PDOStatement')
-            ->setMethods(array('execute'))
-            ->getMock();
-
-        $statmentMock->expects($this->any())
-            ->method('execute')
-            ->will($this->returnCallback(function () {
-                $ex = new \PDOException('Table aready exist');
-                $ref = new \ReflectionClass($ex);
-                $pCode = $ref->getProperty('code');
-                $pCode->setAccessible(true);
-                $pCode->setValue($ex, '42S01');
-
-                throw $ex;
-            }));
-
+        /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
+        $pdoMock = $container->get('sonatra_session.handler.pdo');
         $pdoMock->expects($this->any())
-            ->method('prepare')
-            ->will($this->returnValue($statmentMock)
-        );
+            ->method('createTable')
+            ->willThrowException($ex);
 
         $returnCode = $this->command->run(new ArrayInput(array()), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
-    protected function createConfiguration($dsn)
+    public function testPdoAnotherException()
     {
+        $this->setExpectedException('PDOException', 'PDO exception');
+        $this->createConfiguration();
+
+        /* @var ContainerInterface $container */
+        $container = $this->container;
+        /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
+        $pdoMock = $container->get('sonatra_session.handler.pdo');
+        $pdoMock->expects($this->any())
+            ->method('createTable')
+            ->willThrowException(new \PDOException('PDO exception'));
+
+        $this->command->run(new ArrayInput(array()), new NullOutput());
+    }
+
+    protected function createConfiguration()
+    {
+        $pdoMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->container->expects($this->any())
-            ->method('getParameter')
-            ->will($this->returnCallback(function ($p) use ($dsn) {
-                switch ($p) {
-                    case 'sonatra_session.pdo.dsn':
-                        return $dsn;
-
-                    case 'sonatra_session.pdo.db_options':
-                        return array(
-                        'db_table'    => 'session',
-                        'db_id_col'   => 'session_id',
-                        'db_data_col' => 'session_value',
-                        'db_time_col' => 'session_time',
-                        );
-
-                    default:
-                        throw new \RuntimeException(sprintf('Unknown parameter "%s".', $p));
+            ->method('get')
+            ->will($this->returnCallback(function ($p) use ($pdoMock) {
+                if ($p === 'sonatra_session.handler.pdo') {
+                    return $pdoMock;
                 }
+
+                return;
+            })
+        );
+        $this->container->expects($this->any())
+            ->method('has')
+            ->will($this->returnCallback(function ($p) use ($pdoMock) {
+                if ($p === 'sonatra_session.handler.pdo') {
+                    return true;
+                }
+
+                return false;
             })
         );
     }

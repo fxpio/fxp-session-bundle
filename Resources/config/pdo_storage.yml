@@ -1,13 +1,4 @@
 services:
-    sonatra_session.pdo:
-        class: PDO
-        arguments:
-            dsn:      '%sonatra_session.pdo.dsn%'
-            user:     '%sonatra_session.pdo.username%'
-            password: '%sonatra_session.pdo.password%'
-            options:
-                3:    2
-
     sonatra_session.handler.pdo:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        arguments: ['@sonatra_session.pdo', '%sonatra_session.pdo.db_options%']
+        arguments: ['%sonatra_session.pdo.dsn%', '%sonatra_session.pdo.db_options%']

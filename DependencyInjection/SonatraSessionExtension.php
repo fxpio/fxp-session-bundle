@@ -35,11 +35,11 @@ class SonatraSessionExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         # Session
-        if (isset($config['pdo'])) {
+        if ($config['pdo']['enabled']) {
             $loader->load('pdo_storage.yml');
             $pdo = $config['pdo'];
 
-            if (!isset($config['pdo']['dsn'])) {
+            if (!isset($pdo['dsn'])) {
                 throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
             }
 
@@ -50,8 +50,6 @@ class SonatraSessionExtension extends Extension
             }
 
             $container->setParameter('sonatra_session.pdo.dsn', $dsn);
-            $container->setParameter('sonatra_session.pdo.username', $pdo['username']);
-            $container->setParameter('sonatra_session.pdo.password', $pdo['password']);
             $container->setParameter('sonatra_session.pdo.db_options', $pdo['db_options']);
         }
     }
