@@ -72,9 +72,9 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
         $this->definition = $this->getMockBuilder('Symfony\\Component\\Console\\Input\\InputDefinition')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->kernel = $this->getMock('Symfony\\Component\\HttpKernel\\KernelInterface');
-        $this->helperSet = $this->getMock('Symfony\\Component\\Console\\Helper\\HelperSet');
-        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\KernelInterface')->getMock();
+        $this->helperSet = $this->getMockBuilder('Symfony\\Component\\Console\\Helper\\HelperSet')->getMock();
+        $this->container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
 
         $this->application->expects($this->any())
             ->method('getDefinition')
@@ -106,9 +106,12 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
         $this->command->setApplication($application);
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage The PDO Handler must be enabled in the config 'sonatra_session.pdo.enabled'
+     */
     public function testPdoExceptionNotParameter()
     {
-        $this->setExpectedException('\Exception', 'The PDO Handler must be enabled in the config \'sonatra_session.pdo.enabled\'');
         $this->command->run(new ArrayInput(array()), new NullOutput());
     }
 
@@ -142,9 +145,12 @@ abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_Test
         $this->assertEquals(0, $returnCode);
     }
 
+    /**
+     * @expectedException \PDOException
+     * @expectedExceptionMessage PDO exception
+     */
     public function testPdoAnotherException()
     {
-        $this->setExpectedException('PDOException', 'PDO exception');
         $this->createConfiguration();
 
         /* @var ContainerInterface $container */

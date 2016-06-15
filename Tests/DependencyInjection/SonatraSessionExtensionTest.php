@@ -47,9 +47,11 @@ class SonatraSessionExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($container->has('sonatra_session.handler.pdo'));
     }
 
+    /**
+     * @expectedException \Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException
+     */
     public function testExtensionDsnMissing()
     {
-        $this->setExpectedException('Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException');
         $this->createContainer(array('pdo' => array('dsn' => null)));
     }
 
