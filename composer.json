@@ -17,7 +17,10 @@
         "symfony/console": "~3.0"
     },
     "autoload": {
-        "psr-4": { "Sonatra\\Bundle\\SessionBundle\\": "" }
+        "psr-4": { "Sonatra\\Bundle\\SessionBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "extra": {
         "branch-alias": {
