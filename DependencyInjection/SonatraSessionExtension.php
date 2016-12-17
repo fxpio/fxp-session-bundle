@@ -34,7 +34,7 @@ class SonatraSessionExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        # Session
+        // Session
         if ($config['pdo']['enabled']) {
             $loader->load('pdo_session.xml');
             $this->configPdo($container, $config['pdo']);
