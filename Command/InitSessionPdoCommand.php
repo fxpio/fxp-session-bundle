@@ -30,7 +30,7 @@ class InitSessionPdoCommand extends ContainerAwareCommand
     {
         $this->setName('init:session:pdo')
         ->setDescription('Initializes the PDO session storage')
-        ->setHelp(<<<EOT
+        ->setHelp(<<<'EOT'
 The <info>init:session:pdo</info> command initializes the PDO Session.
 EOT
         );
