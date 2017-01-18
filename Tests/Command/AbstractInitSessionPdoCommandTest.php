@@ -11,11 +11,11 @@
 
 namespace Sonatra\Bundle\SessionBundle\Tests\Command;
 
+use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
-use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

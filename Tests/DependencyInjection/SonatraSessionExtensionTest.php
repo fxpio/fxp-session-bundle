@@ -11,9 +11,9 @@
 
 namespace Sonatra\Bundle\SessionBundle\Tests\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sonatra\Bundle\SessionBundle\SonatraSessionBundle;
 use Sonatra\Bundle\SessionBundle\DependencyInjection\SonatraSessionExtension;
+use Sonatra\Bundle\SessionBundle\SonatraSessionBundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Tests case for Extension.

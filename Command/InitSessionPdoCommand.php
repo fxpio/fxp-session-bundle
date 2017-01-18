@@ -11,10 +11,10 @@
 
 namespace Sonatra\Bundle\SessionBundle\Command;
 
+use Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException;
 
 /**
  * This command initializes the session table in database.
