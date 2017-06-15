@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SessionBundle\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractInitSessionPdoCommandTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractInitSessionPdoCommandTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

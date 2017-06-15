@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SessionBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SessionBundle\DependencyInjection\SonatraSessionExtension;
 use Sonatra\Bundle\SessionBundle\SonatraSessionBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SonatraSessionExtensionTest extends \PHPUnit_Framework_TestCase
+class SonatraSessionExtensionTest extends TestCase
 {
     public function testExtensionExist()
     {
