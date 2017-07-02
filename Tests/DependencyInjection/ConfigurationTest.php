@@ -38,10 +38,10 @@ class ConfigurationTest extends TestCase
         return array(
             'pdo' => array(
                 'enabled' => true,
-                'dsn' => '%database_driver%:host=%database_host%;dbname=%database_name%',
+                'dsn' => '%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%',
                 'db_options' => array(
-                    'db_username' => '%database_user%',
-                    'db_password' => '%database_password%',
+                    'db_username' => '%env(DATABASE_USER)%',
+                    'db_password' => '%env(DATABASE_PASSWORD)%',
                     'db_connection_options' => array(),
                 ),
             ),

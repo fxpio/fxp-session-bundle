@@ -60,11 +60,11 @@ class SonatraSessionExtensionTest extends TestCase
     {
         $configs = empty($config) ? array() : array($config);
         $container = new ContainerBuilder();
-        $container->setParameter('database_driver', 'pdo_database_driver');
-        $container->setParameter('database_host', 'database_host');
-        $container->setParameter('database_name', 'database_name');
-        $container->setParameter('database_user', 'database_user');
-        $container->setParameter('database_password', 'database_password');
+        $container->setParameter('env(DATABASE_DRIVER)', 'pdo_database_driver');
+        $container->setParameter('env(DATABASE_HOST)', 'database_host');
+        $container->setParameter('env(DATABASE_NAME)', 'database_name');
+        $container->setParameter('env(DATABASE_USER)', 'database_user');
+        $container->setParameter('env(DATABASE_PASSWORD)', 'database_password');
 
         $bundle = new SonatraSessionBundle();
         $bundle->build($container);
