@@ -23,6 +23,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class SonatraSessionExtensionTest extends TestCase
 {
+    protected function tearDown()
+    {
+        putenv('DATABASE_DRIVER');
+        putenv('DATABASE_HOST');
+        putenv('DATABASE_NAME');
+        putenv('DATABASE_USER');
+        putenv('DATABASE_PASSWORD');
+    }
+
     public function testExtensionExist()
     {
         $container = $this->createContainer();
@@ -37,6 +46,24 @@ class SonatraSessionExtensionTest extends TestCase
         $this->assertTrue($container->hasParameter('sonatra_session.pdo.dsn'));
         $this->assertTrue($container->hasParameter('sonatra_session.pdo.db_options'));
         $this->assertTrue($container->has('sonatra_session.handler.pdo'));
+    }
+
+    public function testExtensionLoaderWithEnvVariables()
+    {
+        putenv('DATABASE_NAME=database_name2');
+
+        $container = $this->createContainer(array(
+            'pdo' => array(
+                'dsn' => '%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%',
+            ),
+        ));
+
+        $this->assertTrue($container->hasParameter('sonatra_session.pdo.dsn'));
+        $this->assertTrue($container->hasParameter('sonatra_session.pdo.db_options'));
+        $this->assertTrue($container->has('sonatra_session.handler.pdo'));
+
+        $dsn = $container->getParameter('sonatra_session.pdo.dsn');
+        $this->assertSame('database_driver:host=database_host;dbname=database_name2', $dsn);
     }
 
     public function testExtensionLoaderWithoutPdo()
