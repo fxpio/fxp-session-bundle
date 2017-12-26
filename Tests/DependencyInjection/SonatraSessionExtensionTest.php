@@ -50,6 +50,8 @@ class SonatraSessionExtensionTest extends TestCase
 
     public function testExtensionLoaderWithEnvVariables()
     {
+        putenv('DATABASE_DRIVER=database_driver');
+        putenv('DATABASE_HOST=database_host');
         putenv('DATABASE_NAME=database_name2');
 
         $container = $this->createContainer(array(
@@ -63,6 +65,11 @@ class SonatraSessionExtensionTest extends TestCase
         $this->assertTrue($container->has('sonatra_session.handler.pdo'));
 
         $dsn = $container->getParameter('sonatra_session.pdo.dsn');
+
+        putenv('DATABASE_DRIVER=');
+        putenv('DATABASE_HOST=');
+        putenv('DATABASE_NAME=');
+
         $this->assertSame('database_driver:host=database_host;dbname=database_name2', $dsn);
     }
 
