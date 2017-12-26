@@ -174,7 +174,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->container->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ($p === 'sonatra_session.handler.pdo') {
+                if ('sonatra_session.handler.pdo' === $p) {
                     return $pdoMock;
                 }
 
@@ -184,7 +184,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->container->expects($this->any())
             ->method('has')
             ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ($p === 'sonatra_session.handler.pdo') {
+                if ('sonatra_session.handler.pdo' === $p) {
                     return true;
                 }
 
