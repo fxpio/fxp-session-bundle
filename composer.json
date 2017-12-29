@@ -1,14 +1,14 @@
 {
-    "name": "sonatra/session-bundle",
+    "name": "fxp/session-bundle",
     "type": "symfony-bundle",
     "description": "Initialize sessions in database using PDO by a simple command",
     "keywords": ["init", "session", "pdo", "database"],
-    "homepage": "https://github.com/sonatra/sonatra-session-bundle",
+    "homepage": "https://github.com/fxpio/fxp-session-bundle",
     "license": "MIT",
     "authors": [
         {
             "name": "François Pluchino",
-            "email": "francois.pluchino@sonatra.com"
+            "email": "francois.pluchino@gmail.com"
         }
     ],
     "minimum-stability": "dev",
@@ -19,7 +19,7 @@
         "symfony/console": "^3.4.0|^4.0.0"
     },
     "autoload": {
-        "psr-4": { "Sonatra\\Bundle\\SessionBundle\\": "" },
+        "psr-4": { "Fxp\\Bundle\\SessionBundle\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]

@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sonatra_session.handler.pdo" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">
-            <argument>%sonatra_session.pdo.dsn%</argument>
-            <argument>%sonatra_session.pdo.db_options%</argument>
+        <service id="fxp_session.handler.pdo" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">
+            <argument>%fxp_session.pdo.dsn%</argument>
+            <argument>%fxp_session.pdo.db_options%</argument>
         </service>
     </services>
 </container>

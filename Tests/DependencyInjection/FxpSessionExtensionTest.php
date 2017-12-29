@@ -1,27 +1,27 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SessionBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SessionBundle\Tests\DependencyInjection;
 
+use Fxp\Bundle\SessionBundle\DependencyInjection\FxpSessionExtension;
+use Fxp\Bundle\SessionBundle\FxpSessionBundle;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SessionBundle\DependencyInjection\SonatraSessionExtension;
-use Sonatra\Bundle\SessionBundle\SonatraSessionBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Tests case for Extension.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SonatraSessionExtensionTest extends TestCase
+class FxpSessionExtensionTest extends TestCase
 {
     protected function tearDown()
     {
@@ -36,16 +36,16 @@ class SonatraSessionExtensionTest extends TestCase
     {
         $container = $this->createContainer();
 
-        $this->assertTrue($container->hasExtension('sonatra_session'));
+        $this->assertTrue($container->hasExtension('fxp_session'));
     }
 
     public function testExtensionLoader()
     {
         $container = $this->createContainer();
 
-        $this->assertTrue($container->hasParameter('sonatra_session.pdo.dsn'));
-        $this->assertTrue($container->hasParameter('sonatra_session.pdo.db_options'));
-        $this->assertTrue($container->has('sonatra_session.handler.pdo'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.dsn'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.db_options'));
+        $this->assertTrue($container->has('fxp_session.handler.pdo'));
     }
 
     public function testExtensionLoaderWithEnvVariables()
@@ -60,11 +60,11 @@ class SonatraSessionExtensionTest extends TestCase
             ),
         ));
 
-        $this->assertTrue($container->hasParameter('sonatra_session.pdo.dsn'));
-        $this->assertTrue($container->hasParameter('sonatra_session.pdo.db_options'));
-        $this->assertTrue($container->has('sonatra_session.handler.pdo'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.dsn'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.db_options'));
+        $this->assertTrue($container->has('fxp_session.handler.pdo'));
 
-        $dsn = $container->getParameter('sonatra_session.pdo.dsn');
+        $dsn = $container->getParameter('fxp_session.pdo.dsn');
 
         putenv('DATABASE_DRIVER=');
         putenv('DATABASE_HOST=');
@@ -77,13 +77,13 @@ class SonatraSessionExtensionTest extends TestCase
     {
         $container = $this->createContainer(array('pdo' => array('enabled' => false)));
 
-        $this->assertFalse($container->hasParameter('sonatra_session.pdo.dsn'));
-        $this->assertFalse($container->hasParameter('sonatra_session.pdo.db_options'));
-        $this->assertFalse($container->has('sonatra_session.handler.pdo'));
+        $this->assertFalse($container->hasParameter('fxp_session.pdo.dsn'));
+        $this->assertFalse($container->hasParameter('fxp_session.pdo.db_options'));
+        $this->assertFalse($container->has('fxp_session.handler.pdo'));
     }
 
     /**
-     * @expectedException \Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException
+     * @expectedException \Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException
      */
     public function testExtensionDsnMissing()
     {
@@ -100,10 +100,10 @@ class SonatraSessionExtensionTest extends TestCase
         $container->setParameter('env(DATABASE_USER)', 'database_user');
         $container->setParameter('env(DATABASE_PASSWORD)', 'database_password');
 
-        $bundle = new SonatraSessionBundle();
+        $bundle = new FxpSessionBundle();
         $bundle->build($container);
 
-        $extension = new SonatraSessionExtension();
+        $extension = new FxpSessionExtension();
         $container->registerExtension($extension);
         $extension->load($configs, $container);
 

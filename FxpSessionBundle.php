@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\SessionBundle\Exception;
+namespace Fxp\Bundle\SessionBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Base ExceptionInterface for the session bundle.
- *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface ExceptionInterface
+class FxpSessionBundle extends Bundle
 {
 }

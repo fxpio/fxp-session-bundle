@@ -19,23 +19,13 @@ Installation is a quick, 2 step process:
 
 ### Step 1: Download the bundle using composer
 
-Add Sonatra SessionBundle in your composer.json:
-
-```js
-{
-    "require": {
-        "sonatra/session-bundle": "~1.0"
-    }
-}
-```
-
-Or tell composer to download the bundle by running the command:
+Tell composer to download the bundle by running the command:
 
 ```bash
-$ php composer.phar update sonatra/session-bundle
+$ composer require fxp/session-bundle
 ```
 
-Composer will install the bundle to your project's `vendor/sonatra` directory.
+Composer will install the bundle to your project's `vendor/fxp` directory.
 
 ### Step 2: Enable the bundle
 
@@ -49,24 +39,24 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Sonatra\Bundle\SessionBundle\SonatraSessionBundle(),
+        new Fxp\Bundle\SessionBundle\FxpSessionBundle(),
     );
 }
 ```
 
-### Step 3: Configure the bundle (optionnal)
+### Step 3: Configure the bundle (optional)
 
-You can override the default configuration adding `sonatra_session` tree in `app/config/config.yml`.
-For see the reference of Sonatra Session Configuration, execute command:
+You can override the default configuration adding `fxp_session` tree in `app/config/config.yml`.
+For see the reference of Fxp Session Configuration, execute command:
 
 ```bash
-$ php app/console config:dump-reference SonatraSessionBundle 
+$ php app/console config:dump-reference FxpSessionBundle 
 ```
 
 ### Next Steps
 
 Now that you have completed the basic installation and configuration of the
-Sonatra SessionBundle, you are ready to learn about usages of the bundle.
+Fxp SessionBundle, you are ready to learn about usages of the bundle.
 
 The following documents are available:
 

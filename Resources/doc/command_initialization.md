@@ -18,5 +18,5 @@ Edit the `app/config/config.yml`:
 
 framework:
     session:
-        handler_id: sonatra_session.handler.pdo
+        handler_id: fxp_session.handler.pdo
 ```

@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SessionBundle\Tests\Command;
+namespace Fxp\Bundle\SessionBundle\Tests\Command;
 
+use Fxp\Bundle\SessionBundle\Command\InitSessionPdoCommand;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SessionBundle\Command\InitSessionPdoCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Tests case for InitSessionPdoCommand.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractInitSessionPdoCommandTest extends TestCase
 {
@@ -109,7 +109,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The PDO Handler must be enabled in the config 'sonatra_session.pdo.enabled'
+     * @expectedExceptionMessage The PDO Handler must be enabled in the config 'fxp_session.pdo.enabled'
      */
     public function testPdoExceptionNotParameter()
     {
@@ -137,7 +137,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         /* @var ContainerInterface $container */
         $container = $this->container;
         /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
-        $pdoMock = $container->get('sonatra_session.handler.pdo');
+        $pdoMock = $container->get('fxp_session.handler.pdo');
         $pdoMock->expects($this->any())
             ->method('createTable')
             ->willThrowException($ex);
@@ -157,7 +157,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         /* @var ContainerInterface $container */
         $container = $this->container;
         /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
-        $pdoMock = $container->get('sonatra_session.handler.pdo');
+        $pdoMock = $container->get('fxp_session.handler.pdo');
         $pdoMock->expects($this->any())
             ->method('createTable')
             ->willThrowException(new \PDOException('PDO exception'));
@@ -174,7 +174,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->container->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ('sonatra_session.handler.pdo' === $p) {
+                if ('fxp_session.handler.pdo' === $p) {
                     return $pdoMock;
                 }
 
@@ -184,7 +184,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->container->expects($this->any())
             ->method('has')
             ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ('sonatra_session.handler.pdo' === $p) {
+                if ('fxp_session.handler.pdo' === $p) {
                     return true;
                 }
 

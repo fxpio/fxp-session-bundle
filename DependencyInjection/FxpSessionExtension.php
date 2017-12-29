@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SessionBundle\DependencyInjection;
+namespace Fxp\Bundle\SessionBundle\DependencyInjection;
 
-use Sonatra\Bundle\SessionBundle\Exception\InvalidConfigurationException;
+use Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -20,9 +20,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * This is the class that loads and manages your bundle configuration.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SonatraSessionExtension extends Extension
+class FxpSessionExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -50,15 +50,15 @@ class SonatraSessionExtension extends Extension
     protected function configPdo(ContainerBuilder $container, array $config)
     {
         if (!isset($config['dsn'])) {
-            throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "sonatra_session" section in the config must be set in order');
+            throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "fxp_session" section in the config must be set in order');
         }
 
         $dsn = $this->resolveEnvVariables($container, $config['dsn']);
         $dsn = $container->getParameterBag()->resolveValue($dsn);
         $dsn = 0 === strpos($dsn, 'pdo_') ? substr($dsn, 4) : $dsn;
 
-        $container->setParameter('sonatra_session.pdo.dsn', $dsn);
-        $container->setParameter('sonatra_session.pdo.db_options', $config['db_options']);
+        $container->setParameter('fxp_session.pdo.dsn', $dsn);
+        $container->setParameter('fxp_session.pdo.db_options', $config['db_options']);
     }
 
     /**

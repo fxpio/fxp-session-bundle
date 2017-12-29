@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SessionBundle\DependencyInjection;
+namespace Fxp\Bundle\SessionBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -18,7 +18,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * Configuration of bundle.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sonatra_session');
+        $rootNode = $treeBuilder->root('fxp_session');
         $rootNode->append($this->getSessionNode());
 
         return $treeBuilder;
