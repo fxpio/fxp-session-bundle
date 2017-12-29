@@ -25,26 +25,26 @@ class ConfigurationTest extends TestCase
     public function testDefaultConfig()
     {
         $processor = new Processor();
-        $config = $processor->processConfiguration(new Configuration(), array(array()));
+        $config = $processor->processConfiguration(new Configuration(), [[]]);
 
         $this->assertEquals(
-                array_merge(array(), self::getBundleDefaultConfig()),
+                array_merge([], self::getBundleDefaultConfig()),
                 $config
         );
     }
 
     protected static function getBundleDefaultConfig()
     {
-        return array(
-            'pdo' => array(
+        return [
+            'pdo' => [
                 'enabled' => true,
                 'dsn' => '%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%',
-                'db_options' => array(
+                'db_options' => [
                     'db_username' => '%env(DATABASE_USER)%',
                     'db_password' => '%env(DATABASE_PASSWORD)%',
-                    'db_connection_options' => array(),
-                ),
-            ),
-        );
+                    'db_connection_options' => [],
+                ],
+            ],
+        ];
     }
 }

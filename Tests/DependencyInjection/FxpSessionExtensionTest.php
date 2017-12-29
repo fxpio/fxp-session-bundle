@@ -54,11 +54,11 @@ class FxpSessionExtensionTest extends TestCase
         putenv('DATABASE_HOST=database_host');
         putenv('DATABASE_NAME=database_name2');
 
-        $container = $this->createContainer(array(
-            'pdo' => array(
+        $container = $this->createContainer([
+            'pdo' => [
                 'dsn' => '%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($container->hasParameter('fxp_session.pdo.dsn'));
         $this->assertTrue($container->hasParameter('fxp_session.pdo.db_options'));
@@ -75,7 +75,7 @@ class FxpSessionExtensionTest extends TestCase
 
     public function testExtensionLoaderWithoutPdo()
     {
-        $container = $this->createContainer(array('pdo' => array('enabled' => false)));
+        $container = $this->createContainer(['pdo' => ['enabled' => false]]);
 
         $this->assertFalse($container->hasParameter('fxp_session.pdo.dsn'));
         $this->assertFalse($container->hasParameter('fxp_session.pdo.db_options'));
@@ -87,12 +87,12 @@ class FxpSessionExtensionTest extends TestCase
      */
     public function testExtensionDsnMissing()
     {
-        $this->createContainer(array('pdo' => array('dsn' => null)));
+        $this->createContainer(['pdo' => ['dsn' => null]]);
     }
 
-    protected function createContainer(array $config = array())
+    protected function createContainer(array $config = [])
     {
-        $configs = empty($config) ? array() : array($config);
+        $configs = empty($config) ? [] : [$config];
         $container = new ContainerBuilder();
         $container->setParameter('env(DATABASE_DRIVER)', 'pdo_database_driver');
         $container->setParameter('env(DATABASE_HOST)', 'database_host');
@@ -107,8 +107,8 @@ class FxpSessionExtensionTest extends TestCase
         $container->registerExtension($extension);
         $extension->load($configs, $container);
 
-        $container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
+        $container->getCompilerPassConfig()->setOptimizationPasses([]);
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
         $container->compile();
 
         return $container;

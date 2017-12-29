@@ -82,14 +82,14 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
             ->will($this->returnValue($this->definition));
         $this->definition->expects($this->any())
             ->method('getArguments')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $this->definition->expects($this->any())
             ->method('getOptions')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
                 new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'),
                 new InputOption('--no-debug', null, InputOption::VALUE_NONE, 'Switches off debug mode.'),
-        )));
+        ]));
         $this->application->expects($this->any())
             ->method('getKernel')
             ->will($this->returnValue($this->kernel));
@@ -113,14 +113,14 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
      */
     public function testPdoExceptionNotParameter()
     {
-        $this->command->run(new ArrayInput(array()), new NullOutput());
+        $this->command->run(new ArrayInput([]), new NullOutput());
     }
 
     public function testTableIsCreated()
     {
         $this->createConfiguration();
 
-        $returnCode = $this->command->run(new ArrayInput(array()), new NullOutput());
+        $returnCode = $this->command->run(new ArrayInput([]), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
@@ -142,7 +142,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
             ->method('createTable')
             ->willThrowException($ex);
 
-        $returnCode = $this->command->run(new ArrayInput(array()), new NullOutput());
+        $returnCode = $this->command->run(new ArrayInput([]), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
@@ -162,7 +162,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
             ->method('createTable')
             ->willThrowException(new \PDOException('PDO exception'));
 
-        $this->command->run(new ArrayInput(array()), new NullOutput());
+        $this->command->run(new ArrayInput([]), new NullOutput());
     }
 
     protected function createConfiguration()

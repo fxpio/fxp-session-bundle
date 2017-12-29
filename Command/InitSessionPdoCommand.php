@@ -48,14 +48,14 @@ EOT
         try {
             $handler = $this->getContainer()->get('fxp_session.handler.pdo');
             $handler->createTable();
-            $output->writeln(array('', '  The table for PDO session is created.'));
+            $output->writeln(['', '  The table for PDO session is created.']);
         } catch (\PDOException $ex) {
             // Mysql and PostgreSQL already table exist code
-            if (!in_array($ex->getCode(), array('42S01', '42P07'))) {
+            if (!in_array($ex->getCode(), ['42S01', '42P07'])) {
                 throw $ex;
             }
 
-            $output->writeln(array('', '  The table for PDO session is already exists.'));
+            $output->writeln(['', '  The table for PDO session is already exists.']);
         }
     }
 }
