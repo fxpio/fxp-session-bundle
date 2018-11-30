@@ -51,7 +51,7 @@ EOT
             $output->writeln(['', '  The table for PDO session is created.']);
         } catch (\PDOException $ex) {
             // Mysql and PostgreSQL already table exist code
-            if (!in_array($ex->getCode(), ['42S01', '42P07'])) {
+            if (!\in_array($ex->getCode(), ['42S01', '42P07'])) {
                 throw $ex;
             }
 
