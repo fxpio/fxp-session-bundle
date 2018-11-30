@@ -11,18 +11,27 @@
 
 namespace Fxp\Bundle\SessionBundle\Command;
 
-use Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
 /**
  * This command initializes the session table in database.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InitSessionPdoCommand extends ContainerAwareCommand
+class InitSessionPdoCommand extends Command
 {
+    private $handler;
+
+    public function __construct(PdoSessionHandler $pdoHandler)
+    {
+        parent::__construct();
+
+        $this->handler = $pdoHandler;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,13 +50,8 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->getContainer()->has('fxp_session.handler.pdo')) {
-            throw new InvalidConfigurationException("The PDO Handler must be enabled in the config 'fxp_session.pdo.enabled'");
-        }
-
         try {
-            $handler = $this->getContainer()->get('fxp_session.handler.pdo');
-            $handler->createTable();
+            $this->handler->createTable();
             $output->writeln(['', '  The table for PDO session is created.']);
         } catch (\PDOException $ex) {
             // Mysql and PostgreSQL already table exist code

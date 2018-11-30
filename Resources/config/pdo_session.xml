@@ -5,8 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="fxp_session.comand.init_session_pdo" class="Fxp\Bundle\SessionBundle\Command\InitSessionPdoCommand" public="false">
+        <service id="fxp_session.command.init_session_pdo" class="Fxp\Bundle\SessionBundle\Command\InitSessionPdoCommand" public="false">
             <tag name="console.command" />
+            <argument type="service" id="fxp_session.handler.pdo"/>
         </service>
 
         <service id="fxp_session.handler.pdo" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler" public="true">
