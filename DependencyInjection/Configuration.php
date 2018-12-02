@@ -27,8 +27,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fxp_session');
+        $treeBuilder = new TreeBuilder('fxp_session');
+        /* @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
         $rootNode->append($this->getSessionNode());
 
         return $treeBuilder;
@@ -41,8 +42,9 @@ class Configuration implements ConfigurationInterface
      */
     private function getSessionNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('pdo');
+        $treeBuilder = new TreeBuilder('pdo');
+        /* @var ArrayNodeDefinition $node */
+        $node = $treeBuilder->getRootNode();
 
         $node
             ->addDefaultsIfNotSet()
