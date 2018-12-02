@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
 /**
  * Tests case for InitSessionPdoCommand.
@@ -103,31 +104,19 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         /* @var Application $application */
         $application = $this->application;
 
-        $this->command = new InitSessionPdoCommand();
+        $pdoMock = $this->createConfiguration();
+        $this->command = new InitSessionPdoCommand($pdoMock);
         $this->command->setApplication($application);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The PDO Handler must be enabled in the config 'fxp_session.pdo.enabled'
-     */
-    public function testPdoExceptionNotParameter()
-    {
-        $this->command->run(new ArrayInput([]), new NullOutput());
     }
 
     public function testTableIsCreated()
     {
-        $this->createConfiguration();
-
         $returnCode = $this->command->run(new ArrayInput([]), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
     public function testTableIsAlreadyCreated()
     {
-        $this->createConfiguration();
-
         $ex = new \PDOException('Table aready exist');
         $ref = new \ReflectionClass($ex);
         $pCode = $ref->getProperty('code');
@@ -152,8 +141,6 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
      */
     public function testPdoAnotherException()
     {
-        $this->createConfiguration();
-
         /* @var ContainerInterface $container */
         $container = $this->container;
         /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
@@ -165,8 +152,12 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->command->run(new ArrayInput([]), new NullOutput());
     }
 
+    /**
+     * @return PdoSessionHandler
+     */
     protected function createConfiguration()
     {
+        /* @var PdoSessionHandler $pdoMock */
         $pdoMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler')
             ->disableOriginalConstructor()
             ->getMock();
@@ -191,5 +182,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
                 return false;
             })
         );
+
+        return $pdoMock;
     }
 }
