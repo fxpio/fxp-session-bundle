@@ -27,7 +27,7 @@ class FxpSessionExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -47,7 +47,7 @@ class FxpSessionExtension extends Extension
      * @param ContainerBuilder $container
      * @param array            $config
      */
-    protected function configPdo(ContainerBuilder $container, array $config)
+    protected function configPdo(ContainerBuilder $container, array $config): void
     {
         if (!isset($config['dsn'])) {
             throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "fxp_session" section in the config must be set in order');
@@ -76,7 +76,7 @@ class FxpSessionExtension extends Extension
 
         foreach ($matches[0] as $i => $match) {
             $key = trim(strtolower($match), '%');
-            $defaultVal = isset($all[$key]) ? $all[$key] : $match;
+            $defaultVal = $all[$key] ?? $match;
             $envVal = getenv($matches[1][$i]);
             $val = false !== $envVal && '' !== $envVal ? $envVal : $defaultVal;
             $dsn = str_replace($match, $val, $dsn);

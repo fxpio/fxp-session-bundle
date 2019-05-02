@@ -15,8 +15,10 @@ namespace Fxp\Bundle\SessionBundle\Tests\Command;
  * Tests case for InitSessionPdoCommand with PgSQL driver.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class InitSessionPdoCommandPgsqlTest extends AbstractInitSessionPdoCommandTest
+final class InitSessionPdoCommandPgsqlTest extends AbstractInitSessionPdoCommandTest
 {
     /**
      * @var string

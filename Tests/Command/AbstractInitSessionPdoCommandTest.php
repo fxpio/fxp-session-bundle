@@ -62,7 +62,7 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
      */
     protected $driver = 'driver';
 
-    public function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Symfony\Component\Console\Application')) {
             $this->markTestSkipped('Symfony Console is not available.');
@@ -70,38 +70,46 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
 
         $this->application = $this->getMockBuilder('Symfony\\Bundle\\FrameworkBundle\\Console\\Application')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
         $this->definition = $this->getMockBuilder('Symfony\\Component\\Console\\Input\\InputDefinition')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
         $this->kernel = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\KernelInterface')->getMock();
         $this->helperSet = $this->getMockBuilder('Symfony\\Component\\Console\\Helper\\HelperSet')->getMock();
         $this->container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerInterface')->getMock();
 
         $this->application->expects($this->any())
             ->method('getDefinition')
-            ->will($this->returnValue($this->definition));
+            ->will($this->returnValue($this->definition))
+        ;
         $this->definition->expects($this->any())
             ->method('getArguments')
-            ->will($this->returnValue([]));
+            ->will($this->returnValue([]))
+        ;
         $this->definition->expects($this->any())
             ->method('getOptions')
             ->will($this->returnValue([
                 new InputOption('--verbose', '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
                 new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'),
                 new InputOption('--no-debug', null, InputOption::VALUE_NONE, 'Switches off debug mode.'),
-        ]));
+            ]))
+        ;
         $this->application->expects($this->any())
             ->method('getKernel')
-            ->will($this->returnValue($this->kernel));
+            ->will($this->returnValue($this->kernel))
+        ;
         $this->application->expects($this->once())
             ->method('getHelperSet')
-            ->will($this->returnValue($this->helperSet));
+            ->will($this->returnValue($this->helperSet))
+        ;
         $this->kernel->expects($this->any())
             ->method('getContainer')
-            ->will($this->returnValue($this->container));
+            ->will($this->returnValue($this->container))
+        ;
 
-        /* @var Application $application */
+        /** @var Application $application */
         $application = $this->application;
 
         $pdoMock = $this->createConfiguration();
@@ -109,13 +117,13 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $this->command->setApplication($application);
     }
 
-    public function testTableIsCreated()
+    public function testTableIsCreated(): void
     {
         $returnCode = $this->command->run(new ArrayInput([]), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
-    public function testTableIsAlreadyCreated()
+    public function testTableIsAlreadyCreated(): void
     {
         $ex = new \PDOException('Table aready exist');
         $ref = new \ReflectionClass($ex);
@@ -123,31 +131,32 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
         $pCode->setAccessible(true);
         $pCode->setValue($ex, '42S01');
 
-        /* @var ContainerInterface $container */
+        /** @var ContainerInterface $container */
         $container = $this->container;
-        /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
+        /** @var \PHPUnit_Framework_MockObject_MockObject $pdoMock */
         $pdoMock = $container->get('fxp_session.handler.pdo');
         $pdoMock->expects($this->any())
             ->method('createTable')
-            ->willThrowException($ex);
+            ->willThrowException($ex)
+        ;
 
         $returnCode = $this->command->run(new ArrayInput([]), new NullOutput());
         $this->assertEquals(0, $returnCode);
     }
 
-    /**
-     * @expectedException \PDOException
-     * @expectedExceptionMessage PDO exception
-     */
-    public function testPdoAnotherException()
+    public function testPdoAnotherException(): void
     {
-        /* @var ContainerInterface $container */
+        $this->expectException(\PDOException::class);
+        $this->expectExceptionMessage('PDO exception');
+
+        /** @var ContainerInterface $container */
         $container = $this->container;
-        /* @var \PHPUnit_Framework_MockObject_MockObject $pdoMock*/
+        /** @var \PHPUnit_Framework_MockObject_MockObject $pdoMock */
         $pdoMock = $container->get('fxp_session.handler.pdo');
         $pdoMock->expects($this->any())
             ->method('createTable')
-            ->willThrowException(new \PDOException('PDO exception'));
+            ->willThrowException(new \PDOException('PDO exception'))
+        ;
 
         $this->command->run(new ArrayInput([]), new NullOutput());
     }
@@ -157,31 +166,34 @@ abstract class AbstractInitSessionPdoCommandTest extends TestCase
      */
     protected function createConfiguration()
     {
-        /* @var PdoSessionHandler $pdoMock */
+        /** @var PdoSessionHandler $pdoMock */
         $pdoMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
         $this->container->expects($this->any())
             ->method('get')
-            ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ('fxp_session.handler.pdo' === $p) {
-                    return $pdoMock;
-                }
-
-                return;
-            })
-        );
+            ->will(
+                $this->returnCallback(function ($p) use ($pdoMock) {
+                    if ('fxp_session.handler.pdo' === $p) {
+                        return $pdoMock;
+                    }
+                })
+        )
+        ;
         $this->container->expects($this->any())
             ->method('has')
-            ->will($this->returnCallback(function ($p) use ($pdoMock) {
-                if ('fxp_session.handler.pdo' === $p) {
-                    return true;
-                }
+            ->will(
+                $this->returnCallback(function ($p) use ($pdoMock) {
+                    if ('fxp_session.handler.pdo' === $p) {
+                        return true;
+                    }
 
-                return false;
-            })
-        );
+                    return false;
+                })
+        )
+        ;
 
         return $pdoMock;
     }

@@ -35,27 +35,29 @@ class InitSessionPdoCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('init:session:pdo')
-        ->setDescription('Initializes the PDO session storage')
-        ->setHelp(<<<'EOT'
+            ->setDescription('Initializes the PDO session storage')
+            ->setHelp(
+            <<<'EOT'
 The <info>init:session:pdo</info> command initializes the PDO Session.
 EOT
-        );
+        )
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         try {
             $this->handler->createTable();
             $output->writeln(['', '  The table for PDO session is created.']);
         } catch (\PDOException $ex) {
             // Mysql and PostgreSQL already table exist code
-            if (!\in_array($ex->getCode(), ['42S01', '42P07'])) {
+            if (!\in_array($ex->getCode(), ['42S01', '42P07'], true)) {
                 throw $ex;
             }
 

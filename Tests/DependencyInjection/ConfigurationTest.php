@@ -19,17 +19,19 @@ use Symfony\Component\Config\Definition\Processor;
  * Tests case for Configuration.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ConfigurationTest extends TestCase
+final class ConfigurationTest extends TestCase
 {
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), [[]]);
 
         $this->assertEquals(
-                array_merge([], self::getBundleDefaultConfig()),
-                $config
+            array_merge([], self::getBundleDefaultConfig()),
+            $config
         );
     }
 

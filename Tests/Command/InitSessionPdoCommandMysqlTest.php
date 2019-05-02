@@ -15,8 +15,10 @@ namespace Fxp\Bundle\SessionBundle\Tests\Command;
  * Tests case for InitSessionPdoCommand with MySQL driver.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class InitSessionPdoCommandMysqlTest extends AbstractInitSessionPdoCommandTest
+final class InitSessionPdoCommandMysqlTest extends AbstractInitSessionPdoCommandTest
 {
     /**
      * @var string

@@ -20,10 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Tests case for Extension.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class FxpSessionExtensionTest extends TestCase
+final class FxpSessionExtensionTest extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         putenv('DATABASE_DRIVER');
         putenv('DATABASE_HOST');
@@ -32,14 +34,14 @@ class FxpSessionExtensionTest extends TestCase
         putenv('DATABASE_PASSWORD');
     }
 
-    public function testExtensionExist()
+    public function testExtensionExist(): void
     {
         $container = $this->createContainer();
 
         $this->assertTrue($container->hasExtension('fxp_session'));
     }
 
-    public function testExtensionLoader()
+    public function testExtensionLoader(): void
     {
         $container = $this->createContainer();
 
@@ -48,7 +50,7 @@ class FxpSessionExtensionTest extends TestCase
         $this->assertTrue($container->has('fxp_session.handler.pdo'));
     }
 
-    public function testExtensionLoaderWithEnvVariables()
+    public function testExtensionLoaderWithEnvVariables(): void
     {
         putenv('DATABASE_DRIVER=database_driver');
         putenv('DATABASE_HOST=database_host');
@@ -73,7 +75,7 @@ class FxpSessionExtensionTest extends TestCase
         $this->assertSame('database_driver:host=database_host;dbname=database_name2', $dsn);
     }
 
-    public function testExtensionLoaderWithoutPdo()
+    public function testExtensionLoaderWithoutPdo(): void
     {
         $container = $this->createContainer(['pdo' => ['enabled' => false]]);
 
@@ -82,11 +84,10 @@ class FxpSessionExtensionTest extends TestCase
         $this->assertFalse($container->has('fxp_session.handler.pdo'));
     }
 
-    /**
-     * @expectedException \Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException
-     */
-    public function testExtensionDsnMissing()
+    public function testExtensionDsnMissing(): void
     {
+        $this->expectException(\Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException::class);
+
         $this->createContainer(['pdo' => ['dsn' => null]]);
     }
 
