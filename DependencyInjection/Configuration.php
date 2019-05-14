@@ -51,7 +51,7 @@ class Configuration implements ConfigurationInterface
             ->canBeDisabled()
             ->children()
             ->scalarNode('dsn')
-            ->defaultValue('%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%')
+            ->defaultValue($this->hasEnvUrl() ? '%env(DATABASE_URL)%' : '%env(DATABASE_DRIVER)%:host=%env(DATABASE_HOST)%;dbname=%env(DATABASE_NAME)%')
             ->info('The DSN of PDO configuration')
             ->end()
             ->end()
@@ -76,11 +76,11 @@ class Configuration implements ConfigurationInterface
             ->info('The name of session column time')
             ->end()
             ->scalarNode('db_username')
-            ->defaultValue('%env(DATABASE_USER)%')
+            ->defaultValue($this->hasEnvUrl() ? null : '%env(DATABASE_USER)%')
             ->info('The username of database')
             ->end()
             ->scalarNode('db_password')
-            ->defaultValue('%env(DATABASE_PASSWORD)%')
+            ->defaultValue($this->hasEnvUrl() ? null : '%env(DATABASE_PASSWORD)%')
             ->info('The password of database')
             ->end()
             ->arrayNode('db_connection_options')
@@ -96,5 +96,10 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $node;
+    }
+
+    private function hasEnvUrl()
+    {
+        return isset($_ENV['DATABASE_URL']) || isset($_SERVER['DATABASE_URL']) || false !== getenv('DATABASE_URL');
     }
 }

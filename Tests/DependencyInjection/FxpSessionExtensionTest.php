@@ -75,6 +75,44 @@ final class FxpSessionExtensionTest extends TestCase
         $this->assertSame('database_driver:host=database_host;dbname=database_name2', $dsn);
     }
 
+    public function testExtensionLoaderWithEnvVariablesAndDatabaseUrl(): void
+    {
+        putenv('DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name');
+
+        $container = $this->createContainer();
+
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.dsn'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.db_options'));
+        $this->assertTrue($container->has('fxp_session.handler.pdo'));
+
+        $dsn = $container->getParameter('fxp_session.pdo.dsn');
+
+        putenv('DATABASE_URL=');
+
+        $this->assertSame('mysql://db_user:db_password@127.0.0.1:3306/db_name', $dsn);
+    }
+
+    public function testExtensionLoaderWithEnvDatabaseUrlVariablesAndCustomDsn(): void
+    {
+        putenv('DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name');
+
+        $container = $this->createContainer([
+            'pdo' => [
+                'dsn' => '%env(DATABASE_URL)%',
+            ],
+        ]);
+
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.dsn'));
+        $this->assertTrue($container->hasParameter('fxp_session.pdo.db_options'));
+        $this->assertTrue($container->has('fxp_session.handler.pdo'));
+
+        $dsn = $container->getParameter('fxp_session.pdo.dsn');
+
+        putenv('DATABASE_URL=');
+
+        $this->assertSame('mysql://db_user:db_password@127.0.0.1:3306/db_name', $dsn);
+    }
+
     public function testExtensionLoaderWithoutPdo(): void
     {
         $container = $this->createContainer(['pdo' => ['enabled' => false]]);
@@ -110,7 +148,7 @@ final class FxpSessionExtensionTest extends TestCase
 
         $container->getCompilerPassConfig()->setOptimizationPasses([]);
         $container->getCompilerPassConfig()->setRemovingPasses([]);
-        $container->compile();
+        $container->compile(true);
 
         return $container;
     }

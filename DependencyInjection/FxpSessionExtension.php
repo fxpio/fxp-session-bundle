@@ -26,6 +26,8 @@ class FxpSessionExtension extends Extension
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -49,39 +51,11 @@ class FxpSessionExtension extends Extension
      */
     protected function configPdo(ContainerBuilder $container, array $config): void
     {
-        if (!isset($config['dsn'])) {
+        if (null === $config['dsn']) {
             throw new InvalidConfigurationException('The "pdo.dsn" parameter under the "fxp_session" section in the config must be set in order');
         }
 
-        $dsn = $this->resolveEnvVariables($container, $config['dsn']);
-        $dsn = $container->getParameterBag()->resolveValue($dsn);
-        $dsn = 0 === strpos($dsn, 'pdo_') ? substr($dsn, 4) : $dsn;
-
-        $container->setParameter('fxp_session.pdo.dsn', $dsn);
+        $container->setParameter('fxp_session.pdo.dsn', $config['dsn']);
         $container->setParameter('fxp_session.pdo.db_options', $config['db_options']);
-    }
-
-    /**
-     * Resolve the environment variables in DSN.
-     *
-     * @param ContainerBuilder $container The container service
-     * @param string           $dsn       The DSN
-     *
-     * @return string
-     */
-    protected function resolveEnvVariables(ContainerBuilder $container, $dsn)
-    {
-        preg_match_all('/%env\((.*?)\)%/', $dsn, $matches, PREG_PATTERN_ORDER);
-        $all = $all = $container->getParameterBag()->all();
-
-        foreach ($matches[0] as $i => $match) {
-            $key = trim(strtolower($match), '%');
-            $defaultVal = $all[$key] ?? $match;
-            $envVal = getenv($matches[1][$i]);
-            $val = false !== $envVal && '' !== $envVal ? $envVal : $defaultVal;
-            $dsn = str_replace($match, $val, $dsn);
-        }
-
-        return $dsn;
     }
 }
