@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('fxp_session');
         /** @var ArrayNodeDefinition $rootNode */
@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return ArrayNodeDefinition
      */
-    private function getSessionNode()
+    private function getSessionNode(): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder('pdo');
         /** @var ArrayNodeDefinition $node */
@@ -98,7 +98,7 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
-    private function hasEnvUrl()
+    private function hasEnvUrl(): bool
     {
         return isset($_ENV['DATABASE_URL']) || isset($_SERVER['DATABASE_URL']) || false !== getenv('DATABASE_URL');
     }

@@ -35,7 +35,7 @@ final class ConfigurationTest extends TestCase
         );
     }
 
-    protected static function getBundleDefaultConfig()
+    protected static function getBundleDefaultConfig(): array
     {
         return [
             'pdo' => [

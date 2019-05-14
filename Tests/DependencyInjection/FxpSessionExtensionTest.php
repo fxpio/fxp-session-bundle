@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\SessionBundle\Tests\DependencyInjection;
 
 use Fxp\Bundle\SessionBundle\DependencyInjection\FxpSessionExtension;
+use Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException;
 use Fxp\Bundle\SessionBundle\FxpSessionBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -124,12 +125,19 @@ final class FxpSessionExtensionTest extends TestCase
 
     public function testExtensionDsnMissing(): void
     {
-        $this->expectException(\Fxp\Bundle\SessionBundle\Exception\InvalidConfigurationException::class);
+        $this->expectException(InvalidConfigurationException::class);
 
         $this->createContainer(['pdo' => ['dsn' => null]]);
     }
 
-    protected function createContainer(array $config = [])
+    /**
+     * @param array $config
+     *
+     * @throws
+     *
+     * @return ContainerBuilder
+     */
+    protected function createContainer(array $config = []): ContainerBuilder
     {
         $configs = empty($config) ? [] : [$config];
         $container = new ContainerBuilder();
