@@ -100,6 +100,6 @@ class Configuration implements ConfigurationInterface
 
     private function hasEnvUrl(): bool
     {
-        return false !== getenv('DATABASE_URL');
+        return isset($_ENV['DATABASE_URL']) || isset($_SERVER['DATABASE_URL']) || false !== getenv('DATABASE_URL');
     }
 }
